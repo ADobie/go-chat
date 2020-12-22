@@ -21,7 +21,7 @@ type Msg struct {
 	Username string `json:"username" gorm:"type:varchar(255)"`
 }
 
-func register(c *gin.Context) {
+func Register(c *gin.Context) {
 	var regData User
 	err := c.BindJSON(&regData)
 	if err != nil {
@@ -39,7 +39,7 @@ func register(c *gin.Context) {
 	}
 }
 
-func login(c *gin.Context) {
+func Login(c *gin.Context) {
 	var logData User
 	err := c.BindJSON(&logData)
 	if err != nil {
@@ -58,7 +58,7 @@ func login(c *gin.Context) {
 	}
 }
 
-func getSession(c *gin.Context) bool {
+func GetSession(c *gin.Context) bool {
 	session := sessions.Default(c)
 	username := session.Get("username")
 	if username != nil {

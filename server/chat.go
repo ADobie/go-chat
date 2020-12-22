@@ -1,9 +1,13 @@
 package server
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"go-chat/conf"
+)
+
 
 type Recvmsg struct{
-	Recieve string `json:"recieve"`
+	Receive string `json:"receive"`
 }
 
 type Sendmsg struct{
@@ -13,19 +17,24 @@ type Sendmsg struct{
 func Handler(c *gin.Context) {
 	var recv Recvmsg
 	var send Sendmsg
-	conn,err := Websocket.upgrader.Upgrade(c.Writer,c.Request,nil)
-    if err != nil{
-		panic(err)
-	}
+	room:=conf.NewRoom()
+	name:=getUsername(c)
+	me:=conf.NewUser(name)
+	me.Ws = conf.EstWebsocket(c)
+	room.AddToUsers(me)
+	//conn,err := Websocket.Upgrader.Upgrade(c.Writer,c.Request,nil)
+    //if err != nil{
+		//panic(err)
+	//}
 	NewMessage:=make(chan string)
 	go func() {
 	for {
-		err = conn.ReadJSON(&recv)
+		err := me.Ws.ReadJSON(&recv)
 		if err != nil {
 			close(NewMessage)
 			return
 		}
-        NewMessage<-recv.Recieve
+        NewMessage<-recv.Receive
 	}
 }()
 for{
@@ -37,9 +46,11 @@ for{
 		send=Sendmsg{
 			Send:msg,
 		}
-		err=conn.WriteJSON(&send)
-		if err != nil {
-			return
+		for _,v:=range room.Users{
+			err:=v.WriteJSON(&send)
+			if err != nil {
+				return
+			}
 		}
 	}
 }

@@ -1,4 +1,4 @@
-package server
+package conf
 
 import (
 	"github.com/gorilla/websocket"
@@ -7,7 +7,7 @@ import (
 
 
 var Websocket = &ws{
-	upgrader: &websocket.Upgrader{
+	Upgrader: &websocket.Upgrader{
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
 		CheckOrigin: func(r *http.Request) bool {
@@ -17,5 +17,5 @@ var Websocket = &ws{
 }
 
 type ws struct {
-	upgrader *websocket.Upgrader
+	Upgrader *websocket.Upgrader
 }
