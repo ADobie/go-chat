@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"go-chat/conf"
 )
@@ -19,9 +20,11 @@ func Handler(c *gin.Context) {
 	var send Sendmsg
 	room:=conf.NewRoom()
 	name:=getUsername(c)
+	fmt.Println(name)
 	me:=conf.NewUser(name)
 	me.Ws = conf.EstWebsocket(c)
 	room.AddToUsers(me)
+	fmt.Println(me)
 	//conn,err := Websocket.Upgrader.Upgrade(c.Writer,c.Request,nil)
     //if err != nil{
 		//panic(err)
