@@ -4,6 +4,7 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
+	"go-chat/conf"
 	"go-chat/server"
 	"log"
 	"net/http"
@@ -11,6 +12,11 @@ import (
 
 func main(){
 	server.Database()
+	room := conf.NewRoom()
+	//_, err := server.ParseToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicGFzc3dvcmQiOiJhZG1pbiIsImV4cCI6MTYwOTAwMTg3MSwiaXNzIjoiZ2luLWJsb2cifQ.sAws8iZ0VMF4Hn0exp4URjLu-0B4SI2DTk3ZhZcPFT4")
+	//if err != nil {
+	//	panic(err)
+	//}
 	r:=gin.Default()
 	r.Use(Cors())
 
@@ -27,7 +33,7 @@ func main(){
 	a.Use(server.JWT())
 	a.GET("/ws",func(c *gin.Context){
 		//if server.GetSession(c){
-			server.Handler(c)
+			server.Handler(c,room)
 		//}
 	})
 	r.Run(":4444")

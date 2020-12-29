@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/EDDYCJY/go-gin-example/pkg/e"
 	_ "github.com/EDDYCJY/go-gin-example/pkg/setting"
-	"github.com/EDDYCJY/go-gin-example/pkg/util"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
@@ -26,7 +25,6 @@ type Msg struct {
 }
 
 var jwtSecret = []byte("31415926535")
-
 
 type Claims struct {
 	Username string `json:"username"`
@@ -72,7 +70,7 @@ func JWT() gin.HandlerFunc {
 		if token == "" {
 			code = e.INVALID_PARAMS
 		} else {
-			claims, err := util.ParseToken(token)
+			claims, err := ParseToken(token)
 			if err != nil {
 				fmt.Println(err)
 				code = e.ERROR_AUTH_CHECK_TOKEN_FAIL
@@ -133,8 +131,6 @@ func Login(c *gin.Context) {
 		return
 	}
 }
-
-
 
 func getUsername(c *gin.Context) string {
 	token:=c.Query("token")

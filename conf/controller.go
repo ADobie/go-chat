@@ -15,9 +15,10 @@ func NewEvent(typ string,username string,txt string) Event {
 	}
 }
 
-func NewUser(username string) Client {
-	tmp:=make(chan Client)
-	s:=<-tmp
+func NewUser(username string) *Client {
+	//tmp:=make(chan Client)
+	//s:=<-tmp
+	s := new(Client)
 	s.Username = username
 	return s
 }

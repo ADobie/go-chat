@@ -15,16 +15,17 @@ type Sendmsg struct{
 	Send string `json:"send"`
 }
 
-func Handler(c *gin.Context) {
+
+
+func Handler(c *gin.Context,room *conf.Room) {
 	var recv Recvmsg
 	var send Sendmsg
-	room:=conf.NewRoom()
+
 	name:=getUsername(c)
 	fmt.Println(name)
 	me:=conf.NewUser(name)
 	me.Ws = conf.EstWebsocket(c)
-	room.AddToUsers(me)
-	fmt.Println(me)
+	room.AddToUsers(*me)
 	//conn,err := Websocket.Upgrader.Upgrade(c.Writer,c.Request,nil)
     //if err != nil{
 		//panic(err)
